@@ -156,15 +156,17 @@ const questions = [
     memory:"✅ 有公平洗牌；❌ 抽之前可以偷看。"
   },
   {
-    text:"依就診日期分組：星期一進 A 組，星期二進 B 組。",
+    text:"依病歷號奇偶數分 A/B 組，但病人納入後才由中央系統揭示組別。",
     answer:"A",
-    scene:`<div class="scenegrid">
-      <div class="card"><div class="bigemoji">🧑‍⚕️👉</div><strong>研究者依日期分組</strong></div>
-      <div class="card"><strong>📅 就診日期</strong><br><br>星期一 → <b style="color:#1d4ed8">A 組</b><br>星期二 → <b style="color:#be123c">B 組</b><br>星期三 → <b style="color:#1d4ed8">A 組</b><br>星期四 → <b style="color:#be123c">B 組</b></div>
-      <div class="card"><div class="bigemoji">🤔❓</div><strong>這真的算隨機嗎？</strong></div>
+    scene:`<div class="flow">
+      <div class="card"><div class="bigemoji">🪪</div><strong>病歷號奇偶數分組</strong><br>奇數 → <b style="color:#1d4ed8">A 組</b><br>偶數 → <b style="color:#be123c">B 組</b></div>
+      <div class="arrow">→</div>
+      <div class="card"><div class="bigemoji">👵✅</div><strong>病人先納入研究</strong></div>
+      <div class="arrow">→</div>
+      <div class="card"><div class="bigemoji">🖥️</div><strong>中央系統揭示組別</strong></div>
     </div>`,
-    explanation:"就診日期是可預測的規則，不是真正的隨機方法，因此 Randomization 有問題。",
-    memory:"❌ 可預測的規則，不等於隨機分派。"
+    explanation:"依病歷號奇偶數分組屬於固定規則，不是真正的隨機分派，所以 Randomization 有問題；但病人納入後才由中央系統揭示組別，收案者在納入前看不到分派結果，因此 Allocation concealment 可視為有做到。",
+    memory:"❌ 分組規則不是隨機；✅ 分派結果有先藏好。"
   },
   {
     text:"病人納入後，才由中央系統告知組別。",
