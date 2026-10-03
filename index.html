@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>研究防作弊審查官｜EBM互動小遊戲</title>
+<style>
+:root{
+  --navy:#0d2f63; --blue:#e8f5ff; --pink:#ffe9ed; --green:#e9f8e8;
+  --yellow:#fff3c9; --line:#b8dcf4; --ink:#111827; --muted:#64748b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:#fff;color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",Arial,sans-serif;
+}
+.wrap{max-width:1180px;margin:auto;padding:20px}
+.header{text-align:center;margin-bottom:14px}
+.title{font-size:clamp(30px,5vw,64px);font-weight:900;color:var(--navy);line-height:1.05}
+.badge{display:inline-block;margin-left:10px;padding:10px 18px;border-radius:999px;background:var(--navy);color:#fff;font-weight:800;font-size:clamp(14px,2vw,22px)}
+.subtitle{display:inline-block;margin-top:12px;padding:9px 22px;border-radius:999px;background:#fff4bd;color:var(--navy);font-weight:900;font-size:clamp(16px,2.3vw,26px)}
+.layout{display:grid;grid-template-columns:190px minmax(0,1fr) 190px;gap:14px;align-items:start}
+.side{display:flex;flex-direction:column;gap:12px}
+.bubble{background:#164f9d;color:#fff;border-radius:38px;padding:20px;font-weight:900;text-align:center;font-size:20px;line-height:1.4}
+.detective{font-size:72px;text-align:center}
+.books div{border:2px solid #18365a;border-radius:8px;padding:8px 10px;font-weight:900;margin-bottom:7px}
+.books .b1{background:#bcdcff}.books .b2{background:#ffc7d1}.books .b3{background:#bfe9ce}
+.decor{border:2px solid var(--line);border-radius:18px;background:#f9fcff;padding:12px;text-align:center;font-weight:900;color:var(--navy)}
+.decor .emoji{font-size:42px;margin-bottom:6px}
+.game{border:3px solid var(--line);border-radius:28px;overflow:hidden;background:#fff}
+.topbar{background:var(--navy);color:#fff;padding:12px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;font-weight:900}
+.qcount{white-space:nowrap}.qcount .num,.score .num{font-size:32px;color:#ffd253}
+.progress{flex:1;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;min-width:160px}
+.seg{height:12px;border-radius:999px;background:#d7dde7}.seg.on{background:#f6bd3f}
+.score{white-space:nowrap}
+.content{padding:16px}
+.scene{background:#fffaf5;border-radius:24px;padding:14px;min-height:170px;display:flex;align-items:center;justify-content:center}
+.qtext{margin-top:12px;background:#dff2ff;border-radius:18px;padding:15px;text-align:center;color:var(--navy);font-size:clamp(18px,2.1vw,25px);font-weight:900;line-height:1.5}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.choice{border:3px solid;border-radius:18px;padding:14px 16px;font-size:clamp(16px,1.8vw,22px);font-weight:900;color:var(--navy);cursor:pointer;text-align:left;min-height:62px;transition:.12s transform,.12s box-shadow,.12s opacity}
+.choice:hover{transform:translateY(-1px)}
+.choice:active{transform:scale(.985)}
+.a{background:var(--blue);border-color:#2f69a9}.b{background:var(--pink);border-color:#c44762}.c{background:var(--green);border-color:#378f55}.d{background:var(--yellow);border-color:#dc951d}
+.choice.correct{outline:4px solid #2f9e44;outline-offset:2px}.choice.wrong{outline:4px solid #d9485f;outline-offset:2px}.choice.dim{opacity:.45}
+.feedback{display:none;margin-top:14px;border:2px solid var(--line);border-radius:18px;padding:14px;background:#f8fbff}
+.feedback.show{display:block}.fbtitle{font-size:20px;font-weight:900;color:var(--navy)}.fbtext{margin-top:6px;line-height:1.65}.memory{margin-top:10px;background:#fff;border-radius:12px;padding:10px;font-weight:900;color:var(--navy)}
+.actions{display:flex;justify-content:flex-end;margin-top:14px}
+.next,.restart{border:0;border-radius:14px;background:var(--navy);color:#fff;padding:12px 20px;font-size:17px;font-weight:900;cursor:pointer}
+.next[hidden]{display:none}
+.mission{margin:16px auto 0;max-width:760px;border:4px solid #f3c43f;background:#fff9db;border-radius:999px;padding:12px 18px;text-align:center;color:var(--navy);font-size:clamp(18px,2.2vw,26px);font-weight:900}
+.mission .red{color:#d92d20}
+.final{display:none;border:3px solid var(--line);border-radius:28px;padding:24px;text-align:center;margin-top:16px}
+.final.show{display:block}.final .emoji{font-size:64px}.final h2{color:var(--navy);font-size:30px;margin:8px 0}.takehome{max-width:650px;margin:16px auto;background:#fff8db;border-radius:18px;padding:18px;text-align:left;line-height:1.7}
+.smallnote{text-align:center;color:var(--muted);font-size:13px;margin-top:12px}
+.scenegrid{display:grid;width:100%;grid-template-columns:repeat(3,1fr);gap:10px;align-items:center}
+.card{border-radius:18px;padding:12px;text-align:center;background:#fff;border:2px solid #e5e7eb}
+.bigemoji{font-size:48px}
+.flow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;width:100%}
+.arrow{font-size:34px;color:var(--navy);font-weight:900}
+.people{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.person{min-width:86px;border-radius:16px;padding:10px;text-align:center;font-weight:900}
+.person.A{background:#dbeafe;color:#1d4ed8}.person.B{background:#ffe4e6;color:#be123c}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}.side{display:none}.wrap{padding:12px}
+  .choices{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div><span class="title">研究防作弊審查官 🔎</span><span class="badge">手機互動小遊戲</span></div>
+    <div class="subtitle">請判斷每個情境屬於哪一種：</div>
+  </div>
+
+  <div class="layout">
+    <aside class="side">
+      <div class="bubble">仔細觀察<br>找出關鍵線索！</div>
+      <div class="detective">🧑‍⚕️🔍</div>
+      <div class="books">
+        <div class="b1">臨床研究</div>
+        <div class="b2">實證醫學</div>
+        <div class="b3">研究倫理</div>
+      </div>
+    </aside>
+
+    <main>
+      <section id="game" class="game">
+        <div class="topbar">
+          <div class="qcount">第 <span id="qnum" class="num">1</span> 題 / 4</div>
+          <div class="progress" aria-label="答題進度">
+            <div class="seg on"></div><div class="seg"></div><div class="seg"></div><div class="seg"></div>
+          </div>
+          <div class="score">🏆 得分 <span id="score" class="num">0</span> / 4</div>
+        </div>
+
+        <div class="content">
+          <div id="scene" class="scene"></div>
+          <div id="qtext" class="qtext"></div>
+
+          <div class="choices">
+            <button class="choice a" data-answer="A">A. 隨機分派有問題</button>
+            <button class="choice b" data-answer="B">B. 分派隱蔽有問題</button>
+            <button class="choice c" data-answer="C">C. 兩者都 OK</button>
+            <button class="choice d" data-answer="D">D. 兩者都有問題</button>
+          </div>
+
+          <div id="feedback" class="feedback" aria-live="polite">
+            <div id="fbtitle" class="fbtitle"></div>
+            <div id="fbtext" class="fbtext"></div>
+            <div id="memory" class="memory"></div>
+          </div>
+
+          <div class="actions"><button id="next" class="next" hidden>下一題 →</button></div>
+        </div>
+      </section>
+
+      <section id="final" class="final">
+        <div id="finalEmoji" class="emoji">🏆</div>
+        <h2>挑戰完成！</h2>
+        <div style="font-size:21px">你的成績：<strong><span id="finalScore">0</span> / 4</strong></div>
+        <div class="takehome">
+          <strong>最後只記兩句：</strong><br>
+          🎲 <strong>隨機分派（Randomization）</strong>＝有沒有公平洗牌？<br>
+          🙈 <strong>分派隱蔽（Allocation concealment）</strong>＝抽之前能不能偷看？
+        </div>
+        <button id="restart" class="restart">再玩一次</button>
+      </section>
+    </main>
+
+    <aside class="side">
+      <div class="decor"><div class="emoji">💻</div>研究分派系統</div>
+      <div class="decor"><div class="emoji">📋</div>研究流程</div>
+      <div class="decor"><div class="emoji">🔒✉️</div>分派隱蔽</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div class="decor" style="background:#dbeafe">A 組<br>👤👤👤</div>
+        <div class="decor" style="background:#ffe4e6">B 組<br>👤👤👤</div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="mission">🎯 任務：找出哪裡有 <span class="red">作弊空間</span>！</div>
+</div>
+
+<script>
+const questions = [
+  {
+    text:"電腦亂數分組，但醫師桌上放著完整分組表。",
+    answer:"B",
+    scene:`<div class="scenegrid">
+      <div class="card"><div class="bigemoji">💻</div><strong>電腦亂數分組</strong></div>
+      <div class="card"><div class="bigemoji">🧑‍⚕️📄</div><strong>完整分組表</strong><br>1 → A<br>2 → B<br>3 → A</div>
+      <div class="card"><div class="bigemoji">😰🩺</div><strong>下一組看得到！</strong></div>
+    </div>`,
+    explanation:"電腦亂數代表隨機序列有產生；但醫師事先看得到完整分組表，因此下一位的分派結果可以被預測，分派隱蔽有問題。",
+    memory:"✅ 有公平洗牌；❌ 抽之前可以偷看。"
+  },
+  {
+    text:"依就診日期分組：星期一進 A 組，星期二進 B 組。",
+    answer:"A",
+    scene:`<div class="scenegrid">
+      <div class="card"><div class="bigemoji">🧑‍⚕️👉</div><strong>研究者依日期分組</strong></div>
+      <div class="card"><strong>📅 就診日期</strong><br><br>星期一 → <b style="color:#1d4ed8">A 組</b><br>星期二 → <b style="color:#be123c">B 組</b><br>星期三 → <b style="color:#1d4ed8">A 組</b><br>星期四 → <b style="color:#be123c">B 組</b></div>
+      <div class="card"><div class="bigemoji">🤔❓</div><strong>這真的算隨機嗎？</strong></div>
+    </div>`,
+    explanation:"就診日期是可預測的規則，不是真正的隨機方法，因此 Randomization 有問題。",
+    memory:"❌ 可預測的規則，不等於隨機分派。"
+  },
+  {
+    text:"病人納入後，才由中央系統告知組別。",
+    answer:"C",
+    scene:`<div class="flow">
+      <div class="card"><div class="bigemoji">👵✅</div><strong>已納入研究</strong></div>
+      <div class="arrow">→</div>
+      <div class="card"><div class="bigemoji">🖥️</div><strong>中央系統告知組別</strong></div>
+      <div class="arrow">→</div>
+      <div class="card"><div class="bigemoji">🧑‍⚕️📄</div><strong>收到 B 組</strong></div>
+    </div>`,
+    explanation:"若分組序列本身是用真正的隨機方法產生，而且病人納入後才由中央系統揭示組別，則隨機分派與分派隱蔽都做到了。",
+    memory:"✅ 公平洗牌；✅ 抽之前也不能偷看。"
+  },
+  {
+    text:"A、B、A、B 交替分組，而且大家都知道順序。",
+    answer:"D",
+    scene:`<div style="width:100%">
+      <div class="people">
+        <div class="person A">A 組<br>👨<br>1</div>
+        <div class="person B">B 組<br>👩<br>2</div>
+        <div class="person A">A 組<br>👨‍🦳<br>3</div>
+        <div class="person B">B 組<br>👩<br>4</div>
+        <div class="person A">A 組<br>👨<br>5</div>
+        <div class="person B">B 組<br>👩<br>6</div>
+      </div>
+      <div style="margin-top:12px;background:#fff8db;border-radius:14px;padding:10px;text-align:center;font-weight:900;color:#0d2f63">💭 A、B、A、B……下一組完全猜得到！</div>
+    </div>`,
+    explanation:"交替分組不是隨機，而且所有人都知道下一組，因此既沒有真正的 Randomization，也沒有 Allocation concealment。",
+    memory:"❌ 沒有公平洗牌；❌ 下一組也能事先知道。"
+  }
+];
+
+let index=0, score=0, answered=false;
+const qnum=document.getElementById("qnum");
+const scoreEl=document.getElementById("score");
+const scene=document.getElementById("scene");
+const qtext=document.getElementById("qtext");
+const feedback=document.getElementById("feedback");
+const fbtitle=document.getElementById("fbtitle");
+const fbtext=document.getElementById("fbtext");
+const memory=document.getElementById("memory");
+const next=document.getElementById("next");
+const game=document.getElementById("game");
+const final=document.getElementById("final");
+const finalScore=document.getElementById("finalScore");
+const finalEmoji=document.getElementById("finalEmoji");
+const restart=document.getElementById("restart");
+const buttons=[...document.querySelectorAll(".choice")];
+const segs=[...document.querySelectorAll(".seg")];
+
+function render(){
+  answered=false;
+  const q=questions[index];
+  qnum.textContent=index+1;
+  scene.innerHTML=q.scene;
+  qtext.textContent=q.text;
+  feedback.classList.remove("show");
+  next.hidden=true;
+  segs.forEach((s,i)=>s.classList.toggle("on",i<=index));
+  buttons.forEach(b=>{
+    b.disabled=false;
+    b.classList.remove("correct","wrong","dim");
+  });
+}
+function choose(letter,btn){
+  if(answered)return;
+  answered=true;
+  const q=questions[index];
+  const correct=letter===q.answer;
+  if(correct)score++;
+  scoreEl.textContent=score;
+  buttons.forEach(b=>{
+    b.disabled=true;
+    if(b.dataset.answer===q.answer)b.classList.add("correct");
+    else if(b!==btn)b.classList.add("dim");
+  });
+  if(!correct)btn.classList.add("wrong");
+  fbtitle.textContent=correct?"🎯 答對了！":"💡 差一點！正確答案是 "+q.answer;
+  fbtext.textContent=q.explanation;
+  memory.textContent=q.memory;
+  feedback.classList.add("show");
+  next.textContent=index===questions.length-1?"看結果 →":"下一題 →";
+  next.hidden=false;
+}
+buttons.forEach(btn=>btn.addEventListener("click",()=>choose(btn.dataset.answer,btn)));
+next.addEventListener("click",()=>{
+  if(!answered)return;
+  if(index<questions.length-1){index++;render();}
+  else{
+    game.style.display="none";
+    finalScore.textContent=score;
+    finalEmoji.textContent=score===4?"🏆":score===3?"🎉":score===2?"👍":"🧠";
+    final.classList.add("show");
+  }
+});
+restart.addEventListener("click",()=>{
+  index=0;score=0;answered=false;
+  scoreEl.textContent="0";
+  final.classList.remove("show");
+  game.style.display="block";
+  render();
+});
+render();
+</script>
+</body>
+</html>
